@@ -1,0 +1,26 @@
+{
+  "name": "student-dropout-risk-analyzer",
+  "version": "1.0.0",
+  "description": "POC để đánh giá rủi ro bỏ học của sinh viên dựa trên dữ liệu hành vi",
+  "main": "dropout_risk_analyzer.js",
+  "scripts": {
+    "start": "node dropout_risk_analyzer.js",
+    "console": "node console_risk_analyzer.js",
+    "demo": "node demo_console.js",
+    "analyze": "node dropout_risk_analyzer.js",
+    "test": "node test_analyzer.js"
+  },
+  "keywords": [
+    "student",
+    "dropout",
+    "risk",
+    "analysis",
+    "education",
+    "nodejs"
+  ],
+  "author": "CS Team",
+  "license": "MIT",
+  "engines": {
+    "node": ">=12.0.0"
+  }
+}

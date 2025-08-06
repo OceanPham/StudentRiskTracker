@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎓 Hệ thống Đánh giá Rủi ro Bỏ học Sinh viên</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <h1>🎓 Hệ thống Đánh giá Rủi ro Bỏ học Sinh viên</h1>
+                <p>Phân tích và dự đoán nguy cơ bỏ học dựa trên dữ liệu hành vi học tập</p>
+            </div>
+            <div class="header-actions">
+                <button class="btn btn-primary" onclick="openConfigModal()">
+                    <i class="fas fa-cog"></i> Cấu hình
+                </button>
+                <button class="btn btn-success" onclick="refreshData()">
+                    <i class="fas fa-sync-alt"></i> Làm mới
+                </button>
+            </div>
+        </header>
+
+        <!-- Stats Cards -->
+        <div class="stats-grid">
+            <div class="stat-card low-risk">
+                <div class="stat-icon">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <div class="stat-info">
+                    <h3 id="lowRiskCount">0</h3>
+                    <p>Rủi ro Thấp</p>
+                </div>
+            </div>
+            <div class="stat-card medium-risk">
+                <div class="stat-icon">
+                    <i class="fas fa-exclamation-triangle"></i>
+                </div>
+                <div class="stat-info">
+                    <h3 id="mediumRiskCount">0</h3>
+                    <p>Rủi ro Trung bình</p>
+                </div>
+            </div>
+            <div class="stat-card high-risk">
+                <div class="stat-icon">
+                    <i class="fas fa-times-circle"></i>
+                </div>
+                <div class="stat-info">
+                    <h3 id="highRiskCount">0</h3>
+                    <p>Rủi ro Cao</p>
+                </div>
+            </div>
+            <div class="stat-card total">
+                <div class="stat-icon">
+                    <i class="fas fa-users"></i>
+                </div>
+                <div class="stat-info">
+                    <h3 id="totalStudents">0</h3>
+                    <p>Tổng sinh viên</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Controls -->
+        <div class="controls">
+            <div class="search-filter">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="searchInput" placeholder="Tìm kiếm theo tên hoặc ID sinh viên...">
+                </div>
+                <div class="filter-group">
+                    <label for="riskFilter">Lọc theo mức rủi ro:</label>
+                    <select id="riskFilter">
+                        <option value="">Tất cả</option>
+                        <option value="LOW">Rủi ro Thấp</option>
+                        <option value="MEDIUM">Rủi ro Trung bình</option>
+                        <option value="HIGH">Rủi ro Cao</option>
+                        <option value="NOT_EVALUATED">Chưa đánh giá</option>
+                    </select>
+                </div>
+                <div class="sort-group">
+                    <label for="sortBy">Sắp xếp theo:</label>
+                    <select id="sortBy">
+                        <option value="name">Tên A-Z</option>
+                        <option value="name_desc">Tên Z-A</option>
+                        <option value="risk_desc">Rủi ro cao trước</option>
+                        <option value="risk_asc">Rủi ro thấp trước</option>
+                        <option value="probability_desc">Xác suất cao trước</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Student List -->
+        <div class="student-list-container">
+            <div class="section-header">
+                <h2>📋 Danh sách Sinh viên</h2>
+                <div class="section-actions">
+                    <button class="btn btn-warning" onclick="evaluateAllStudents()">
+                        <i class="fas fa-calculator"></i> Đánh giá tất cả
+                    </button>
+                </div>
+            </div>
+
+            <!-- Loading Indicator -->
+            <div id="loadingIndicator" class="loading-indicator">
+                <div class="spinner"></div>
+                <p>Đang tải dữ liệu...</p>
+            </div>
+
+            <!-- Student Table -->
+            <div class="table-container">
+                <table class="student-table" id="studentTable">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Tên sinh viên</th>
+                            <th>Email</th>
+                            <th>Điểm rủi ro</th>
+                            <th>Mức độ rủi ro</th>
+                            <th>Xác suất bỏ học</th>
+                            <th>Ngày đánh giá</th>
+                            <th>Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody id="studentTableBody">
+                        <!-- Data will be populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Empty State -->
+            <div id="emptyState" class="empty-state" style="display: none;">
+                <i class="fas fa-users-slash"></i>
+                <h3>Không có sinh viên nào</h3>
+                <p>Không tìm thấy sinh viên phù hợp với tiêu chí lọc.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Student Detail Modal -->
+    <div id="studentModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Chi tiết Sinh viên</h2>
+                <span class="close" onclick="closeStudentModal()">&times;</span>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- Student details will be populated here -->
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeStudentModal()">Đóng</button>
+                <button class="btn btn-primary" id="evaluateBtn" onclick="evaluateStudent()">
+                    <i class="fas fa-calculator"></i> Đánh giá rủi ro
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Configuration Modal -->
+    <div id="configModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>⚙️ Cấu hình Ngưỡng Đánh giá</h2>
+                <span class="close" onclick="closeConfigModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="configForm">
+                    <div class="form-group">
+                        <label for="attendanceThreshold">Ngưỡng tỷ lệ tham dự (%):</label>
+                        <input type="number" id="attendanceThreshold" min="0" max="100" step="1" required>
+                        <small>Sinh viên có tỷ lệ tham dự thấp hơn ngưỡng này sẽ được cộng 1 điểm rủi ro</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="assignmentThreshold">Ngưỡng tỷ lệ nộp bài tập (%):</label>
+                        <input type="number" id="assignmentThreshold" min="0" max="100" step="1" required>
+                        <small>Sinh viên có tỷ lệ nộp bài thấp hơn ngưỡng này sẽ được cộng 1 điểm rủi ro</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="contactThreshold">Ngưỡng số lần liên hệ thất bại:</label>
+                        <input type="number" id="contactThreshold" min="0" step="1" required>
+                        <small>Sinh viên có số lần liên hệ thất bại từ ngưỡng này trở lên sẽ được cộng 1 điểm rủi
+                            ro</small>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeConfigModal()">Hủy</button>
+                <button class="btn btn-primary" onclick="saveConfiguration()">
+                    <i class="fas fa-save"></i> Lưu cấu hình
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <!-- Scripts -->
+    <script src="js/main.js"></script>
+</body>
+
+</html>

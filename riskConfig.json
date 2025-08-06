@@ -1,0 +1,10 @@
+{
+  "attendanceThreshold": 0.75,
+  "assignmentThreshold": 0.5,
+  "contactFailureThreshold": 2,
+  "riskLevelMapping": [
+    { "min": 0, "max": 1, "level": "LOW" },
+    { "min": 2, "max": 2, "level": "MEDIUM" },
+    { "min": 3, "max": 90, "level": "HIGH" }
+  ]
+}

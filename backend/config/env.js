@@ -12,5 +12,5 @@ module.exports = {
     NODE_ENV: process.env.NODE_ENV || 'development',
 
     // CORS Configuration
-    CORS_ORIGIN: process.env.CORS_ORIGIN || 'http://localhost:3001'
+    CORS_ORIGIN: process.env.CORS_ORIGIN || 'http://localhost:8080'
 };

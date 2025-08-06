@@ -51,13 +51,13 @@ npm start
 cd frontend
 
 # Python 3
-python -m http.server 3001
+python -m http.server 8080
 
 # Hoặc Node.js
-npx serve -p 3001
+# npx serve -p 3001
 
-# Hoặc PHP
-php -S localhost:3001
+# # Hoặc PHP
+# php -S localhost:3001
 ```
 
 **✅ Frontend running at: http://localhost:3001**
@@ -69,9 +69,10 @@ php -S localhost:3001
 3. Click **"Đánh giá tất cả"** để test
 4. Kiểm tra kết quả đánh giá rủi ro
 
-## 🎉 Done! 
+## 🎉 Done!
 
 Hệ thống đã sẵn sàng với:
+
 - ✅ 5 sinh viên mẫu
 - ✅ Dữ liệu attendance, assignments, contacts
 - ✅ Các API endpoints hoạt động
@@ -80,6 +81,7 @@ Hệ thống đã sẵn sàng với:
 ## 🔧 Nếu có lỗi:
 
 **Database connection failed:**
+
 ```bash
 # Kiểm tra MySQL running
 sudo service mysql start
@@ -88,6 +90,7 @@ brew services start mysql
 ```
 
 **Port đã sử dụng:**
+
 ```bash
 # Kill process
 lsof -ti:3000 | xargs kill -9
@@ -95,6 +98,7 @@ lsof -ti:3001 | xargs kill -9
 ```
 
 **CORS error:**
+
 - Đảm bảo frontend chạy port 3001
 - Kiểm tra backend .env CORS_ORIGIN
 

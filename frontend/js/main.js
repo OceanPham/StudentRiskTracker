@@ -1,5 +1,5 @@
 // Configuration
-const API_BASE_URL = 'http://localhost:3005/api';
+const API_BASE_URL = 'http://localhost:3000/api';
 
 // Global variables
 let allStudents = [];
@@ -21,32 +21,32 @@ document.addEventListener('DOMContentLoaded', function () {
     // Wait a bit more for DOM to be fully ready
     setTimeout(() => {
         console.log('🔄 Starting data load after DOM ready...');
-        
+
         // Verify critical DOM elements exist
         const criticalElements = [
             'studentTableBody',
-            'loadingIndicator', 
+            'loadingIndicator',
             'emptyState',
             'searchInput',
             'riskFilter',
             'sortBy'
         ];
-        
+
         const missing = criticalElements.filter(id => !document.getElementById(id));
         if (missing.length > 0) {
             console.error('❌ Missing DOM elements:', missing);
             return;
         }
-        
+
         console.log('✅ All DOM elements found');
-        
+
         // Setup event listeners first
         setupEventListeners();
-        
+
         // Load initial data
         loadStudents();
         loadConfiguration();
-        
+
         console.log('✅ Application initialized successfully');
     }, 100);
 });
@@ -148,16 +148,16 @@ async function loadStudents() {
 
         console.log("response: ", response);
 
-                if (response && response.success && Array.isArray(response.data)) {
+        if (response && response.success && Array.isArray(response.data)) {
             allStudents = response.data;
             console.log(`✅ Loaded ${allStudents.length} students`);
-            
+
             updateStatistics();
-            
+
             // Force display all students on initial load
             console.log('🔄 Force displaying students...');
             displayStudents(allStudents);
-            
+
             // Also call filter function for consistency
             setTimeout(() => {
                 filterAndDisplayStudents();
@@ -259,7 +259,7 @@ function getRiskPriority(riskLevel) {
 // Display students in table
 function displayStudents(students) {
     console.log("displayStudents called with:", students.length, "students");
-    
+
     // Ensure DOM elements exist
     const tableBody = document.getElementById('studentTableBody');
     if (!tableBody) {
@@ -361,20 +361,20 @@ function formatDate(dateString) {
 function showEmptyState() {
     const table = document.getElementById('studentTable');
     const empty = document.getElementById('emptyState');
-    
+
     if (table) table.style.display = 'none';
     if (empty) empty.style.display = 'block';
-    
+
     console.log('📝 Showing empty state');
 }
 
 function hideEmptyState() {
     const table = document.getElementById('studentTable');
     const empty = document.getElementById('emptyState');
-    
+
     if (table) table.style.display = 'table';
     if (empty) empty.style.display = 'none';
-    
+
     console.log('📝 Hiding empty state');
 }
 
@@ -824,4 +824,17 @@ function getToastTitle(type) {
 }
 
 // Add CSS for toast slide out animation
-co
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes toastSlideOut {
+        from {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        to {
+            opacity: 0;
+            transform: translateX(100%);
+        }
+    }
+`;
+document.head.appendChild(style);
